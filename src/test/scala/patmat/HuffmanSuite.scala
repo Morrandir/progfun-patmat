@@ -30,6 +30,25 @@ class HuffmanSuite extends FunSuite {
     assert(string2Chars("hello, world") === List('h', 'e', 'l', 'l', 'o', ',', ' ', 'w', 'o', 'r', 'l', 'd'))
   }
 
+  test("times(\"hello, world\")") {
+    val t = times(string2Chars("hello, world"))
+    assert(t.contains(('h', 1)))
+    assert(t.contains(('e', 1)))
+    assert(t.contains(('l', 3)))
+    assert(t.contains(('o', 2)))
+    assert(t.contains((',', 1)))
+    assert(t.contains((' ', 1)))
+    assert(t.contains(('w', 1)))
+    assert(t.contains(('r', 1)))
+    assert(t.contains(('d', 1)))
+    assert(t.size === 9)
+  }
+
+  test("makeOrderedLeafList") {
+    val t = makeOrderedLeafList(times(string2Chars("hello, world")))
+    assert(t === List(Leaf('h', 1), Leaf('e', 1), Leaf(',', 1), Leaf(' ', 1), Leaf('w', 1), Leaf('r', 1), Leaf('d', 1), Leaf('o', 2), Leaf('l', 3)))
+  }
+
   test("makeOrderedLeafList for some frequency table") {
     assert(makeOrderedLeafList(List(('t', 2), ('e', 1), ('x', 3))) === List(Leaf('e',1), Leaf('t',2), Leaf('x',3)))
   }

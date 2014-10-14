@@ -77,7 +77,27 @@ object Huffman {
    *       println("integer is  : "+ theInt)
    *   }
    */
-  def times(chars: List[Char]): List[(Char, Int)] = ???
+  def times(chars: List[Char]): List[(Char, Int)] = {
+    def timesHelper(chars: List[Char], result: List[(Char, Int)]): List[(Char, Int)] = chars match {
+      case c::cs => timesHelper(cs, count(c, result))
+      case List() => result
+    }
+
+    def count(char: Char, result: List[(Char, Int)]): List[(Char, Int)] = result match {
+      case List() =>
+        val pair: (Char, Int) = (char, 1)
+        List(pair)
+      case r::rs =>
+        if (r._1.equals(char)) {
+          val pair: (Char, Int) = (char, r._2 + 1)
+          pair :: rs
+        } else {
+          r :: count(char, rs)
+        }
+    }
+
+    timesHelper(chars, List())
+  }
 
   /**
    * Returns a list of `Leaf` nodes for a given frequency table `freqs`.
@@ -86,7 +106,17 @@ object Huffman {
    * head of the list should have the smallest weight), where the weight
    * of a leaf is the frequency of the character.
    */
-  def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = ???
+  def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = {
+    def insert(freqs: List[(Char, Int)], result: List[Leaf]): List[Leaf] = (freqs, result) match {
+      case (List(), _) => result
+      case (f::fs, List()) => insert(fs, List(Leaf(f._1, f._2)))
+      case (f::fs, r::rs) =>
+        if (f._2 < r.weight) insert(fs, Leaf(f._1, f._2)::result)
+        else r::insert(freqs, rs)
+    }
+
+    insert(freqs, List())
+  }
 
   /**
    * Checks whether the list `trees` contains only one single code tree.
